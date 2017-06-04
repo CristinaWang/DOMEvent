@@ -19,6 +19,7 @@ if ( elem.addEventListener ) {
 	elem.attachEvent( "on" + type, eventHandle );
 }
 ```
+Further reading of [source code](https://github.com/jquery/jquery/blob/6e995583a11b63bf1d94142da6408955ee93e7cc/src/event.js#L97-102)
 
 ### $.click(handler) and $.on('click', handler)
 $.click(handler) is same as $.on('click', handler), and $.click() is same as $.trigger('click'). And the difference is:

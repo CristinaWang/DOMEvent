@@ -5,13 +5,13 @@ Click, touch, load, drag, change, input, error, resize — [the list of possible
 
 ## How to add a DOM event listeners or Remove it
 * Javascipt way: element.addEventListener(eventName, handler, useCapture) and element.removeEventListener(eventName, handler)
-  * handler: Need to have a reference to the handler if you are going to remove it later (While Jquery:)
+  * handler: Need to have a reference to the handler if you are going to remove it later (While jQuery:)
     ```javascript
     $("#element").on("click.someNamespace", handler);
     $("#element").off("click.someNamespace");
     ```
   * useCapture: Wether the handler should be fire during the capture phrase
-* Jquery way:
+* jQuery way:
   * $.on('click', handler) and $.off('click', handler)
   * $.click(handler)
   * $.bind('click', handler) and $.unbind('click', handler)

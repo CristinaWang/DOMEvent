@@ -19,7 +19,7 @@ Click, touch, load, drag, change, input, error, resize — [the list of possible
 Explain the difference in [here](https://github.com/CristinaWang/DOMEvent/blob/master/Multiple-ways-to-listen-event.md).
 
 ## Event phrase
-(/eventflow.png)
+![Alt text](/eventflow.png)
 [Demo: Slow motion event path](http://jsbin.com/exezex/4/edit?css,js,output)
 
 ### Capture phrase

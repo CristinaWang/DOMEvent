@@ -5,7 +5,7 @@
 
 ## How to add a DOM event listeners or Remove it
 
-* **Javascipt: **
+* **Javascipt:**
   * element.addEventListener(eventName, handler, useCapture) / element.removeEventListener(eventName, handler, useCapture)
     >**handler**: Need to have a reference to the handler if you are going to remove it later
      **useCapture**: Whether the handler should be fire during the capture phrase
@@ -17,10 +17,14 @@
   * $.bind()/$.delegate()/$.live() / $.unbind(event, handler) _(Superseded since jQuery 1.7)_
   
 
-### $.on(event, handler)
+### $.on(event, handler) 
+
+[API DOC](http://api.jquery.com/on/)
 
 $element.on(event, handler);
 $element.on(event, selector, handler);
+
+
 
 ### $.click(handler) and $.on('click', handler)
 $.click(handler) is same as $.on('click', handler), and $.click() is same as $.trigger('click'). And the difference is:

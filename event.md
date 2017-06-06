@@ -4,14 +4,14 @@
 > Click, touch, load, drag, change, input, error, resize — [the list of possible DOM events](https://developer.mozilla.org/en-US/docs/Web/API/Event) is lengthy. Events can be triggered on any part of a document, whether by a user’s interaction or by the browser. They don’t just start and end in one place; they flow through the document, on a life cycle of their own. **This life cycle** is what makes DOM events so extensible and useful. As a developer, you should understand how DOM events work, so that you can harness their potential and build engaging experiences.
 
 ## How to add a DOM event listeners or Remove it
-***
-* Javascipt way: 
+
+* **Javascipt: **
   * element.addEventListener(eventName, handler, useCapture) / element.removeEventListener(eventName, handler, useCapture)
     >**handler**: Need to have a reference to the handler if you are going to remove it later
      **useCapture**: Whether the handler should be fire during the capture phrase
   * myEl.onclick = handler; _(Can be override since it's an attribute)_;
   
-* jQuery way:
+* **jQuery:**
   * $.on(event, handler) & $.one(event, handler) / $.off(event, handler)
   * $.click(handler)
   * $.bind()/$.delegate()/$.live() / $.unbind(event, handler) _(Superseded since jQuery 1.7)_
@@ -19,7 +19,8 @@
 
 ### $.on(event, handler)
 
-$element.on(event, handler)
+$element.on(event, handler);
+$element.on(event, selector, handler);
 
 ### $.click(handler) and $.on('click', handler)
 $.click(handler) is same as $.on('click', handler), and $.click() is same as $.trigger('click'). And the difference is:
@@ -56,8 +57,6 @@ if ( elem.addEventListener ) {
 ```
 Further reading of [source code](https://github.com/jquery/jquery/blob/6e995583a11b63bf1d94142da6408955ee93e7cc/src/event.js#L97-102)
 
->##### Tip :sparkles: [Memory leaks](http://javascript.crockford.com/memory/leak.html)
-
 ## Event phrase
 ***
 ![Alt text](/eventflow.png)
@@ -81,29 +80,49 @@ In the case of nested elements, mouse and pointer events are always targeted at 
 
 ### Bubble phrase
 
-
 A [demo](http://jsbin.com/unuhec/4/edit?html,css,js,output) to identify event phases. 
 
 ## The Event Object
 The properties of event object:
 * **type (string)**: This is the name of the event.
 * **target (node)**
-  This is the DOM node where the event originated. (The core of Onion)
+  This is the DOM node where the event originated. _(The core of Onion)_
 * **currentTarget (node)**
   This is the DOM node that the event callback is currently firing on.
 * **bubbles (boolean)**
   This indicates whether this is a “bubbling” event (which we’ll explain later).
 * **preventDefault (function)**
-* **stopPropagation (function)** Interrupting the path of the event at any point on its journey
-* **stopImmediatePropagation (function)** //todo example
-  This prevents any callbacks from being fired on any nodes further along the event chain, including any additional callbacks   of the same event name on the current node.
+* **stopPropagation (function)** _Interrupting the path of the event at any point on its journey_
+	```javascript
+	child.addEventListener('click', function(event) {
+ 		event.stopPropagation();
+	});
+
+	parent.addEventListener('click', function(event) {
+	 // If the child element is clicked
+	 // this callback will not fire
+	});
+	```
+* **stopImmediatePropagation (function)** 
+_This prevents any callbacks from being fired on any nodes further along the event chain, including any additional callbacks of the same event name on the current node._
+```javascript
+child.addEventListener('click', function(event) {
+	event.stopImmediatePropagation();
+});
+child.addEventListener('click', function(event) {		 
+	// If the child element is clicked
+	// this callback will not fire
+});
+```
 * **cancelable (boolean)**
   This indicates whether the default behaviour of this event can be prevented by calling the event.preventDefault method.
 * **defaultPrevented (boolean)**
   This states whether the preventDefault method has been called on the event object.
 * **eventPhase (number)**
   The phase that the event is currently in: none (0), capture (1), target (2) or bubbling (3).
-  
+
+[Demo](https://jsfiddle.net/xcLLp7ev/) to view event object.
+
 ## Custom DOM Events
 ***
 ```javascript

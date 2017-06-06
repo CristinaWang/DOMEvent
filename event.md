@@ -4,6 +4,7 @@
 > Click, touch, load, drag, change, input, error, resize — [the list of possible DOM events](https://developer.mozilla.org/en-US/docs/Web/API/Event) is lengthy. Events can be triggered on any part of a document, whether by a user’s interaction or by the browser. They don’t just start and end in one place; they flow through the document, on a life cycle of their own. **This life cycle** is what makes DOM events so extensible and useful. As a developer, you should understand how DOM events work, so that you can harness their potential and build engaging experiences.
 
 ## How to add a DOM event listeners or Remove it
+***
 
 * **Javascipt:**
   * element.addEventListener(eventName, handler, useCapture) / element.removeEventListener(eventName, handler, useCapture)
@@ -109,15 +110,15 @@ The properties of event object:
 	```
 * **stopImmediatePropagation (function)** 
 _This prevents any callbacks from being fired on any nodes further along the event chain, including any additional callbacks of the same event name on the current node._
-```javascript
-child.addEventListener('click', function(event) {
-	event.stopImmediatePropagation();
-});
-child.addEventListener('click', function(event) {		 
-	// If the child element is clicked
-	// this callback will not fire
-});
-```
+	```javascript
+	child.addEventListener('click', function(event) {
+		event.stopImmediatePropagation();
+	});
+	child.addEventListener('click', function(event) {		 
+		// If the child element is clicked
+		// this callback will not fire
+	});
+	```
 * **cancelable (boolean)**
   This indicates whether the default behaviour of this event can be prevented by calling the event.preventDefault method.
 * **defaultPrevented (boolean)**

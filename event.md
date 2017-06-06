@@ -1,29 +1,74 @@
 # DOM Event
 
 ## Background
-Click, touch, load, drag, change, input, error, resize — [the list of possible DOM events](https://developer.mozilla.org/en-US/docs/Web/API/Event) is lengthy. Events can be triggered on any part of a document, whether by a user’s interaction or by the browser. They don’t just start and end in one place; they flow through the document, on a life cycle of their own. This life cycle is what makes DOM events so extensible and useful. As a developer, you should understand how DOM events work, so that you can harness their potential and build engaging experiences.
+Click, touch, load, drag, change, input, error, resize — [the list of possible DOM events](https://developer.mozilla.org/en-US/docs/Web/API/Event) is lengthy. Events can be triggered on any part of a document, whether by a user’s interaction or by the browser. They don’t just start and end in one place; they flow through the document, on a life cycle of their own. **This life cycle** is what makes DOM events so extensible and useful. As a developer, you should understand how DOM events work, so that you can harness their potential and build engaging experiences.
 
 ## How to add a DOM event listeners or Remove it
-* Javascipt way: element.addEventListener(eventName, handler, useCapture) and element.removeEventListener(eventName, handler)
-  * handler: Need to have a reference to the handler if you are going to remove it later (While jQuery:)
-    ```javascript
-    $("#element").on("click.someNamespace", handler);
-    $("#element").off("click.someNamespace");
-    ```
-  * useCapture: Wether the handler should be fire during the capture phrase
-* jQuery way:
-  * $.on('click', handler) and $.off('click', handler)
-  * $.click(handler)
-  * $.bind('click', handler) and $.unbind('click', handler)
+* Javascipt way: 
+  * element.addEventListener(eventName, handler, useCapture) / element.removeEventListener(eventName, handler, useCapture)
   
-Explain the difference in [here](https://github.com/CristinaWang/DOMEvent/blob/master/Multiple-ways-to-listen-event.md).
+      * **handler**: Need to have a reference to the handler if you are going to remove it later (While jQuery:)
+            ```javascript
+            $("#element").on("click.someNamespace", handler);
+            $("#element").off("click.someNamespace");
+            ```
+      * **useCapture**: Whether the handler should be fire during the capture phrase
+      
+  * myEl.onclick = handler; _(Can be override since it's an attribute)_;
+  
+* jQuery way:
+  * $.on('click', handler) & $.one('click', handler) / $.off('click', handler)
+  * $.click(handler)
+  * $.bind()/$.delegate()/$.live() / $.unbind('click', handler) _(Superseded since jQuery 1.7)_
+  
+
+### $.on('click', handler)
+
+### $.click(handler) and $.on('click', handler)
+$.click(handler) is same as $.on('click', handler), and $.click() is same as $.trigger('click'). And the difference is:
+* Delagrate ($.on()offers additional flexibility in allowing you to delegate events fired by children)
+```javascript
+$('ul').on('click', 'li', function(){});
+```
+* namesapce
+```javascript
+$("#element").on("click.someNamespace", function() { console.log("anonymous!"); });
+$("#element").off("click.someNamespace");
+```
+* Flexibility 
+```javascript
+$( "div.test" ).on({
+  click: function() {
+    $( this ).toggleClass( "active" );
+  }, mouseenter: function() {
+    $( this ).addClass( "inside" );
+  }, mouseleave: function() {
+    $( this ).removeClass( "inside" );
+  }
+});
+```
+
+#### How jQuery add evenet listener:
+```javascript
+// Bind the global event handler to the element
+if ( elem.addEventListener ) {
+   elem.addEventListener( type, eventHandle, false );
+} else if ( elem.attachEvent ) {
+	elem.attachEvent( "on" + type, eventHandle );
+}
+```
+Further reading of [source code](https://github.com/jquery/jquery/blob/6e995583a11b63bf1d94142da6408955ee93e7cc/src/event.js#L97-102)
+
+##### Tip :sparkles:
+Memory leaks: http://javascript.crockford.com/memory/leak.html
 
 ## Event phrase
 ![Alt text](/eventflow.png)
 [Demo: Slow motion event path](http://jsbin.com/exezex/4/edit?css,js,output)
 
 ### Capture phrase
-Used for prevent some behavior in bubbling phrase:
+The job of the capture phase is to build the propagation path, which the event will travel back through in the bubbling phase.
+Prevent any clicks from firing in a certain element if the event is handled in the capture phase.
 ```javascript
 var form = document.querySelector('form');
 
@@ -33,8 +78,7 @@ form.addEventListener('click', function(event) {
 ```
 
 ### Target phrase
-An event reaching the target is known as the target phase.
-If you have listened for a click event on a <div> element, and the user actually clicks on a <p> element in the div, then the <p> element will become the event target. The fact that events “bubble” means that you are able to listen for clicks on the <div> (or any other ancestor node) and still receive a callback once the event passes through.
+n the case of nested elements, mouse and pointer events are always targeted at the most deeply nested element. 
 
 ### Bubble phrase
 
@@ -43,22 +87,22 @@ A [demo](http://jsbin.com/unuhec/4/edit?html,css,js,output) to identify event ph
 
 ## The Event Object
 The properties of event object:
-* type (string): This is the name of the event.
-* target (node)
-  This is the DOM node where the event originated.
-* currentTarget (node)
+* **type (string)**: This is the name of the event.
+* **target (node)**
+  This is the DOM node where the event originated. (The core of Onion)
+* **currentTarget (node)**
   This is the DOM node that the event callback is currently firing on.
-* bubbles (boolean)
+* **bubbles (boolean)**
   This indicates whether this is a “bubbling” event (which we’ll explain later).
-* preventDefault (function)
-* stopPropagation (function)
-* stopImmediatePropagation (function) //todo example
+* **preventDefault (function)**
+* **stopPropagation (function)** Interrupting the path of the event at any point on its journey
+* **stopImmediatePropagation (function)** //todo example
   This prevents any callbacks from being fired on any nodes further along the event chain, including any additional callbacks   of the same event name on the current node.
-* cancelable (boolean)
+* **cancelable (boolean)**
   This indicates whether the default behaviour of this event can be prevented by calling the event.preventDefault method.
-* defaultPrevented (boolean)
+* **defaultPrevented (boolean)**
   This states whether the preventDefault method has been called on the event object.
-* eventPhase (number) //todo example
+* **eventPhase (number)**
   The phase that the event is currently in: none (0), capture (1), target (2) or bubbling (3).
   
 ## Custom DOM Events
@@ -107,12 +151,18 @@ Or use FT Lab’s [ftdomdelegate](https://github.com/ftlabs/ftdomdelegate)
 ## Useful Events
 Debounced callback to normalize the callback rate and prevent extreme thrashing in the layout.
 * ONBEFOREUNLOAD [Demo](http://jsbin.com/inelaj/2/edit)
+  * Not works in react/angular single page application
+  * Note that assigning an onbeforeunload handler prevents the browser from caching the page, thus making return visits a lot slower. Also, onbeforeunload handlers must be synchronous.
 * ERROR
+
   ```javascript
   imageNode.addEventListener('error', function(event) {
       image.style.display = 'none';
   });
   ```
+  
+##### Tip :sparkles: 
+Use debounce when doing resize/scroll etc event
 
 
 

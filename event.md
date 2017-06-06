@@ -1,34 +1,31 @@
 # DOM Event
 
 ## Background
-Click, touch, load, drag, change, input, error, resize — [the list of possible DOM events](https://developer.mozilla.org/en-US/docs/Web/API/Event) is lengthy. Events can be triggered on any part of a document, whether by a user’s interaction or by the browser. They don’t just start and end in one place; they flow through the document, on a life cycle of their own. **This life cycle** is what makes DOM events so extensible and useful. As a developer, you should understand how DOM events work, so that you can harness their potential and build engaging experiences.
+> Click, touch, load, drag, change, input, error, resize — [the list of possible DOM events](https://developer.mozilla.org/en-US/docs/Web/API/Event) is lengthy. Events can be triggered on any part of a document, whether by a user’s interaction or by the browser. They don’t just start and end in one place; they flow through the document, on a life cycle of their own. **This life cycle** is what makes DOM events so extensible and useful. As a developer, you should understand how DOM events work, so that you can harness their potential and build engaging experiences.
 
 ## How to add a DOM event listeners or Remove it
+***
 * Javascipt way: 
   * element.addEventListener(eventName, handler, useCapture) / element.removeEventListener(eventName, handler, useCapture)
-  
-      * **handler**: Need to have a reference to the handler if you are going to remove it later (While jQuery:)
-            ```javascript
-            $("#element").on("click.someNamespace", handler);
-            $("#element").off("click.someNamespace");
-            ```
-      * **useCapture**: Whether the handler should be fire during the capture phrase
-      
+    >**handler**: Need to have a reference to the handler if you are going to remove it later
+     **useCapture**: Whether the handler should be fire during the capture phrase
   * myEl.onclick = handler; _(Can be override since it's an attribute)_;
   
 * jQuery way:
-  * $.on('click', handler) & $.one('click', handler) / $.off('click', handler)
+  * $.on(event, handler) & $.one(event, handler) / $.off(event, handler)
   * $.click(handler)
-  * $.bind()/$.delegate()/$.live() / $.unbind('click', handler) _(Superseded since jQuery 1.7)_
+  * $.bind()/$.delegate()/$.live() / $.unbind(event, handler) _(Superseded since jQuery 1.7)_
   
 
-### $.on('click', handler)
+### $.on(event, handler)
+
+$element.on(event, handler)
 
 ### $.click(handler) and $.on('click', handler)
 $.click(handler) is same as $.on('click', handler), and $.click() is same as $.trigger('click'). And the difference is:
 * Delagrate ($.on()offers additional flexibility in allowing you to delegate events fired by children)
 ```javascript
-$('ul').on('click', 'li', function(){});
+$('ul').on(event, 'li', function(){});
 ```
 * namesapce
 ```javascript
@@ -59,12 +56,14 @@ if ( elem.addEventListener ) {
 ```
 Further reading of [source code](https://github.com/jquery/jquery/blob/6e995583a11b63bf1d94142da6408955ee93e7cc/src/event.js#L97-102)
 
-##### Tip :sparkles:
-Memory leaks: http://javascript.crockford.com/memory/leak.html
+>##### Tip :sparkles: [Memory leaks](http://javascript.crockford.com/memory/leak.html)
 
 ## Event phrase
+***
 ![Alt text](/eventflow.png)
-[Demo: Slow motion event path](http://jsbin.com/exezex/4/edit?css,js,output)
+
+
+###### [Demo: Slow motion event path](http://jsbin.com/exezex/4/edit?css,js,output)
 
 ### Capture phrase
 The job of the capture phase is to build the propagation path, which the event will travel back through in the bubbling phase.
@@ -78,7 +77,7 @@ form.addEventListener('click', function(event) {
 ```
 
 ### Target phrase
-n the case of nested elements, mouse and pointer events are always targeted at the most deeply nested element. 
+In the case of nested elements, mouse and pointer events are always targeted at the most deeply nested element. 
 
 ### Bubble phrase
 
@@ -106,6 +105,7 @@ The properties of event object:
   The phase that the event is currently in: none (0), capture (1), target (2) or bubbling (3).
   
 ## Custom DOM Events
+***
 ```javascript
 var myEvent = new CustomEvent("myevent", {
   detail: {
@@ -126,6 +126,7 @@ myElement.dispatchEvent(myEvent);
 [Demo](http://jsbin.com/emuhef/1/edit?html,css,js,output)
 
 ## Delegate Event Listeners
+***
 * javacript
   ```javascript
   var list = document.querySelector('ul');
@@ -149,6 +150,7 @@ Or use FT Lab’s [ftdomdelegate](https://github.com/ftlabs/ftdomdelegate)
   
 
 ## Useful Events
+***
 Debounced callback to normalize the callback rate and prevent extreme thrashing in the layout.
 * ONBEFOREUNLOAD [Demo](http://jsbin.com/inelaj/2/edit)
   * Not works in react/angular single page application
@@ -161,13 +163,7 @@ Debounced callback to normalize the callback rate and prevent extreme thrashing 
   });
   ```
   
-##### Tip :sparkles: 
-Use debounce when doing resize/scroll etc event
-
-
-
-# More :sparkles: 
-* What the difference between dom.addEventListener('click', handler) vs $.on('click', handler) vs $.click(handler) vs $.bind('click', handler)
+>##### Tip :sparkles: Use debounce when doing resize/scroll etc event
 
 ## Reference
 * [An Introduction To DOM Events](https://www.smashingmagazine.com/2013/11/an-introduction-to-dom-events/)
